@@ -1,31 +1,155 @@
-# 프로토콜 정의
+<h2>프로토콜 정의</h2>
 
+최상위는 type, data(모든 데이터) 로 되어 있다.
 
-
-## 전원 관련
-
-- 최상위는 type, data(모든 데이터) 로 되어 있다. 
-
-
-
-|                        | Pi->System           | System->Pi                               | Pi -> all System                         |
-| :--------------------: | :------------------- | :--------------------------------------- | :--------------------------------------- |
-|         ADD ON         |                      | Server 에서 리스트 가지고 있음                     |                                          |
-|      Check Power       |                      | type : chk_conn ( 30sec )                |                                          |
-|       AP Setting       | type : ack, value: 1 | type : set_ap, <br> ssid : 123, <br>psw:123 <br> open : true | request와 동일                              |
-|      DHCP Setting      | type : ack, value: 1 | type : set_dhcp<br> start_ip : 192.168.191.1 <br> end_ip : 192.168.191.255 <br> rental_time : 100000 | request와 동일                              |
-|     Connect Device     |                      | type : ack, value: 1                     | type : device_list, <br> [ip : 192.168.0.1,<br> mac: 0X3:...] |
-| PortForwarding Setting |                      | type : set_portfwd <br> [name : first_pattrern, <br> ip : 192.168.12.10, <br> in_port : 80, <br> out_port:20] | request와 동일                              |
-|      QOS Setting       |                      | type: set_qos,  down : [{min: (최소속도),max: (최대속도)}],up : [{min: (최소속도),max: (최대속도)}] | request와 동일                              |
-|   StartPage Setting    |                      | type:set_start_page <br> url : www.naver.com | request와 동일                              |
-|     Reset Setting      |                      | type:set_reset                           | 기본 설정 파일                                 |
-|      File Upload       |                      |                                          | type : upload_file, <br> [name : temp.txt, size:1.51MB] |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
-|                        |                      |                                          |                                          |
+<table>
+    <tbody>
+    <tr>
+        <th></th>
+        <th align=center>Pi->System</th>
+        <th align=center>System->Pi</th>
+        <th align=center>Pi ->all System</th>
+    </tr>
+    <tr>
+        <td>ADD ON</td>
+        <td align="center">-</td>
+        <td>
+           Server 에서 리스트 가지고 있음
+        </td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Check Power</td>
+        <td>
+        </td>
+        <td>
+            type : chk_conn (every 30 sec)
+        </td>
+        <td>
+        </td>
+    </tr>
+    <tr>
+        <td>AP Setting</td>
+        <td>
+            type : ack,<br>
+            value: 1
+        </td>
+        <td>
+            type : set_ap,<br>
+            ssid : 123,<br>
+            psw:123,<br>
+            open : true
+        </td>
+        <td>
+            request와 동일
+        </td>
+    </tr>
+    <tr>
+        <td>DHCP Setting</td>
+        <td>
+            type : ack,<br>
+            value: 1
+        </td>
+        <td>
+            type : set_dhcp,<br>
+            start_ip : 192.168.191.1,<br>
+            end_ip : 192.168.191.255,<br>
+            rental_time : 100000(ms)
+        </td>
+        <td>
+            request와 동일
+        </td>
+    </tr>
+    <tr>
+        <td>Connect Device</td>
+        <td></td>
+        <td>
+            type : ack,<br>
+            value: 1
+        </td>
+        <td>
+             type : device_list,<br>
+             connList:[{<br>
+             &nbsp;&nbsp;ip : 192.168.0.1,<br>
+             &nbsp;&nbsp;mac: 0X3ASDW<br>
+             },{
+             &nbsp;&nbsp;ip : 192.168.0.2,<br>
+             &nbsp;&nbsp;mac: 0X3ASDSSW<br>
+             }...]
+        </td>
+    </tr>
+    <tr>
+        <td>PortForwarding Setting</td>
+        <td></td>
+        <td>
+            type : set_portfwd,<br>
+            pattern:[{<br>
+            &nbsp;&nbsp;name : first_pattrern,<br>
+            &nbsp;&nbsp;ip : 192.168.12.10,<br>
+            &nbsp;&nbsp;in_port : 80,<br>
+            &nbsp;&nbsp;out_port:20<br>
+            },{<br>
+            &nbsp;&nbsp;name : first_pattrern,<br>
+            &nbsp;&nbsp;ip : 192.168.12.10,<br>
+            &nbsp;&nbsp;in_port : 80,<br>
+            &nbsp;&nbsp;out_port:20<br>
+            }...]
+        </td>
+        <td>
+             request와 동일
+        </td>
+    </tr>
+    <tr>
+        <td>QOS Setting</td>
+        <td></td>
+        <td>
+             type: set_qos,<br>
+             down : [{<br>
+             &nbsp;&nbsp;min: (최소속도),<br>
+             &nbsp;&nbsp;max: (최대속도),<br>
+             }],<br>
+             up : [{<br>
+             &nbsp;&nbsp;min: (최소속도),<br>
+             &nbsp;&nbsp;max: (최대속도)<br>
+             }]
+        </td>
+        <td>
+             request와 동일
+        </td>
+    </tr>
+    <tr>
+        <td>StartPage Setting</td>
+        <td></td>
+        <td>
+             type: set_start_page,<br>
+             url : www.naver.com
+        </td>
+        <td>
+             request와 동일
+        </td>
+    </tr>
+    <tr>
+        <td>Reset Setting</td>
+        <td></td>
+        <td>
+             type: set_reset
+        </td>
+        <td>
+             기본 설정 파일
+        </td>
+    </tr>
+    <tr>
+        <td>File Upload</td>
+        <td></td>
+        <td>
+        </td>
+        <td>
+             type : upload_file,<br>
+             fileInfo:[{<br>
+             &nbsp;&nbsp;name : temp.txt,<br>
+             &nbsp;&nbsp;size:1.51MB<br>
+             }]
+        </td>
+    </tr>
+</tbody>
+</table>
