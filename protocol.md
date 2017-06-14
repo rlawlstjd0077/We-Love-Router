@@ -13,14 +13,6 @@ ex) type: set_ap_report<br>
         <th align=center>Pi->all System</th>
     </tr>
     <tr>
-        <td>ADD ON</td>
-        <td align="center">-</td>
-        <td>
-           Server 에서 리스트 가지고 있음
-        </td>
-        <td></td>
-    </tr>
-    <tr>
         <td>Check Power</td>
         <td>
         </td>
