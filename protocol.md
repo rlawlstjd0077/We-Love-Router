@@ -4,17 +4,13 @@
 REPORT 때의 type 뒤에는 "_report"를 추가한다.<br>
 ex) type: set_ap_report<br>
 
-- REQUEST : Pi->System
-- RESPONSE : System->Pi
-- REPORT : Pi ->all System<br><br>
-
 <table>
     <tbody>
     <tr>
         <th></th>
-        <th align=center>Req</th>
-        <th align=center>Res</th>
-        <th align=center>Rep</th>
+        <th align=center>Pi->System</th>
+        <th align=center>System->Pi</th>
+        <th align=center>Pi->all System</th>
     </tr>
     <tr>
         <td>ADD ON</td>
@@ -136,12 +132,15 @@ ex) type: set_ap_report<br>
     </tr>
     <tr>
         <td>Reset Setting</td>
-        <td></td>
+        <td>
+            기본 설정 파일
+        </td>
         <td>
              type: set_reset
         </td>
         <td>
-             기본 설정 파일
+            type: set_reset_report,<br>
+            기본 설정 파일
         </td>
     </tr>
     <tr>
@@ -161,3 +160,4 @@ ex) type: set_ap_report<br>
 </table>
 
 // 네트워크 다중화<br>
+// File Upload : 공유기에 연결된 디바이스가 공유기에 파일을 업로드함. 업로드된 파일의 정보를 시스템에 보냄.
