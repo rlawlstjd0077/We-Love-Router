@@ -70,12 +70,12 @@ ex) type: set_ap_report<br>
         <td>Connect Device</td>
         <td></td>
         <td>
-            type : ack,<br>
+            type : device_list_ack,<br>
             value: 1
         </td>
         <td>
              type : device_list,<br>
-             connList:[{<br>
+             deviceList:[{<br>
              &nbsp;&nbsp;ip : 192.168.0.1,<br>
              &nbsp;&nbsp;mac: 0X3ASDW<br>
              },{<br>
