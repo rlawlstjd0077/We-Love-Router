@@ -1,14 +1,20 @@
 <h2>프로토콜 정의</h2>
 
-최상위는 type, data(모든 데이터) 로 되어 있다.
+최상위는 type, data(모든 데이터) 로 되어 있다.<br>
+REPORT 때의 type 뒤에는 "_report"를 추가한다.<br>
+ex) type: set_ap_report<br>
+
+- REQUEST : Pi->System
+- RESPONSE : System->Pi
+- REPORT : Pi ->all System<br><br>
 
 <table>
     <tbody>
     <tr>
         <th></th>
-        <th align=center>Pi->System</th>
-        <th align=center>System->Pi</th>
-        <th align=center>Pi ->all System</th>
+        <th align=center>Req</th>
+        <th align=center>Res</th>
+        <th align=center>Rep</th>
     </tr>
     <tr>
         <td>ADD ON</td>
@@ -31,7 +37,7 @@
     <tr>
         <td>AP Setting</td>
         <td>
-            type : ack,<br>
+            type : set_ap_ack,<br>
             value: 1
         </td>
         <td>
@@ -47,7 +53,7 @@
     <tr>
         <td>DHCP Setting</td>
         <td>
-            type : ack,<br>
+            type : set_dhcp_ack,<br>
             value: 1
         </td>
         <td>
@@ -72,7 +78,7 @@
              connList:[{<br>
              &nbsp;&nbsp;ip : 192.168.0.1,<br>
              &nbsp;&nbsp;mac: 0X3ASDW<br>
-             },{
+             },{<br>
              &nbsp;&nbsp;ip : 192.168.0.2,<br>
              &nbsp;&nbsp;mac: 0X3ASDSSW<br>
              }...]
@@ -153,3 +159,5 @@
     </tr>
 </tbody>
 </table>
+
+// 네트워크 다중화<br>
