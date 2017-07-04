@@ -1,0 +1,1 @@
+{"wireless":{"ssid":"myNetwork","password":123456789},"portForward":{"portForward_list":[]},"startUrl":{"url":"www.naver.com"},"timeLimit":{"timeLimit_list":[]},"dhcp":{"start":"192.0.1.1","end":"192.0.1.255"},"login":{"id":"admin","password":1234}}

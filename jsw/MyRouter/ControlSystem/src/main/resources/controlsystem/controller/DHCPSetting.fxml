@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<fx:root xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+        stylesheets="@../main.css" prefHeight="400.0" prefWidth="600.0" type="BorderPane">
+    <top>
+        <HBox alignment="CENTER_LEFT">
+            <padding>
+                <Insets left="20"/>
+            </padding>
+            <Label text="DHCP power : "/>
+            <JFXToggleButton fx:id="DHCPPower" selected="true"/>
+        </HBox>
+    </top>
+    <center>
+        <HBox alignment="CENTER">
+            <Label text="Range   :   "/>
+            <JFXTextField prefWidth="30" fx:id="startFirstField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="startSecondField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="startThirdField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="startFourthField"/>
+            <Label text="~" prefWidth="50" alignment="CENTER"/>
+            <JFXTextField prefWidth="30" fx:id="endFirstField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="endSecondField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="endThirdField"/>
+            <Label text="." alignment="CENTER" prefWidth="12"/>
+            <JFXTextField prefWidth="30" fx:id="endFourthField"/>
+        </HBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="20"/>
+            </padding>
+            <JFXButton text="Save" styleClass="handle-button" prefWidth="80" fx:id="saveBtn"/>
+            <Label prefWidth="20"/>
+            <JFXButton text="Cancel" styleClass="handle-button" prefWidth="80" fx:id="cancelBtn"/>
+        </HBox>
+    </bottom>
+</fx:root>

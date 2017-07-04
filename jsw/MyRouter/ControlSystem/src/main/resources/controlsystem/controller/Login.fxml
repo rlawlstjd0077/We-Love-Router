@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<fx:root xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         prefHeight="400.0" prefWidth="600.0" type="BorderPane">
+    <center>
+        <GridPane>
+            <padding>
+                <Insets top="40" left="100" right="100"/>
+            </padding>
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER">
+                <ImageView fitWidth="180" fitHeight="180">
+                    <Image url="@../commons/image/user.png"/>
+                </ImageView>
+            </VBox>
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <Label text="ID"/>
+                <JFXTextField fx:id="idField" />
+            </VBox>
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <Label  text="Password"/>
+                <JFXPasswordField fx:id="passwordField"/>
+            </VBox>
+            <VBox alignment="CENTER" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                <JFXButton fx:id="loginBtn" text="Login"/>
+            </VBox>
+            <columnConstraints>
+                <ColumnConstraints percentWidth="100"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="50"/>
+                <RowConstraints percentHeight="15"/>
+                <RowConstraints percentHeight="15"/>
+                <RowConstraints percentHeight="20"/>
+            </rowConstraints>
+        </GridPane>
+    </center>
+</fx:root>
