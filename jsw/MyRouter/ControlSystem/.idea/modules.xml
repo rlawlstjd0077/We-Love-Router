@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jinseong.iml" filepath="$PROJECT_DIR$/.idea/modules/jinseong.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jinseong_main.iml" filepath="$PROJECT_DIR$/.idea/modules/jinseong_main.iml" group="jinseong" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/jinseong_test.iml" filepath="$PROJECT_DIR$/.idea/modules/jinseong_test.iml" group="jinseong" />
+    </modules>
+  </component>
+</project>

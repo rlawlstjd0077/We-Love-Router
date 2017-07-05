@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import impl.org.controlsfx.skin.PropertySheetSkin.PropertyPane?>
+<fx:root xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@../main.css"
+         prefHeight="400.0" prefWidth="600.0" type="BorderPane">
+    <center>
+        <VBox alignment="CENTER">
+            <padding>
+                <Insets left="10" right="10" top="10" bottom="50"/>
+            </padding>
+            <TableView fx:id="portForwardTable" prefWidth="100" prefHeight="240">
+                <columns>
+                    <TableColumn text="Name" fx:id="nameTableColumn"/>
+                    <TableColumn text="IP" fx:id="ipTableColumn"/>
+                    <TableColumn text="External Port" fx:id="extPortTableColumn"/>
+                    <TableColumn text="Internal Port" fx:id="intPortTableColumn"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView  fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            </TableView>
+            <VBox>
+                <padding>
+                    <Insets left="120"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Name   :   "/>
+                    <JFXTextField prefWidth="136" fx:id="nameField"/>
+                    <HBox alignment="CENTER">
+                        <JFXButton text="Add" fx:id="addBtn"></JFXButton>
+                        <Label prefWidth="20"/>
+                        <JFXButton text="Remove" fx:id="removeBtn"></JFXButton>
+                        <HBox.hgrow>
+                            <Priority fx:constant="ALWAYS"/>
+                        </HBox.hgrow>
+                    </HBox>
+                    <VBox.margin>
+                        <Insets top="20" bottom="20"/>
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="IP   :   "/>
+                    <JFXTextField prefWidth="30" fx:id="firstIPField"/>
+                    <Label text="." alignment="CENTER" prefWidth="12"/>
+                    <JFXTextField prefWidth="30" fx:id="secondIPField"/>
+                    <Label text="." alignment="CENTER" prefWidth="12"/>
+                    <JFXTextField prefWidth="30" fx:id="thirdIPField"/>
+                    <Label text="." alignment="CENTER" prefWidth="12"/>
+                    <JFXTextField prefWidth="30" fx:id="fourthIPField"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="External Port   :   "/>
+                    <JFXTextField prefWidth="96" fx:id="extPortField"/>
+                    <VBox.margin>
+                        <Insets top="20" bottom="20"/>
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Internal Port    :   "/>
+                    <JFXTextField prefWidth="96" fx:id="intPortField"/>
+                </HBox>
+                <VBox.vgrow>
+                    <Priority fx:constant="ALWAYS"/>
+                </VBox.vgrow>
+            </VBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="20"/>
+            </padding>
+            <JFXButton text="Save" styleClass="handle-button" prefWidth="80" fx:id="saveBtn"/>
+            <Label prefWidth="20"/>
+            <JFXButton text="Cancel" styleClass="handle-button" prefWidth="80" fx:id="cancelBtn"/>
+        </HBox>
+    </bottom>
+</fx:root>

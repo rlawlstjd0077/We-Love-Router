@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<fx:root xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/8.0.40"
+         prefHeight="400.0" prefWidth="600.0" type="BorderPane" stylesheets="@../main.css">
+    <center>
+        <VBox alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER">
+                    <ImageView pickOnBounds="true" preserveRatio="true" fitWidth="20" fitHeight="20">
+                        <Image url="@../commons/image/earth.png"/>
+                        <HBox.margin>
+                            <Insets top="10"/>
+                        </HBox.margin>
+                    </ImageView>
+                    <Label prefWidth="20"/>
+                    <VBox>
+                        <Label text="StartURL"></Label>
+                        <JFXTextField prefWidth="200" fx:id="urlField"/>
+                    </VBox>
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="20"/>
+            </padding>
+            <JFXButton text="Save" styleClass="handle-button" prefWidth="80" fx:id="saveBtn"/>
+            <Label prefWidth="20"/>
+            <JFXButton text="Cancel" styleClass="handle-button" prefWidth="80" fx:id="cancelBtn"/>
+        </HBox>
+    </bottom>
+</fx:root>

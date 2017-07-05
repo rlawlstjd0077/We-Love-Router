@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.Priority?>
+<fx:root prefHeight="400.0" prefWidth="600.0" stylesheets="@../main.css" type="BorderPane"
+         xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <VBox>
+            <padding>
+                <Insets bottom="100" left="20" right="20" top="20"/>
+            </padding>
+            <TableView fx:id="timeLimitTableview">
+                <columns>
+                    <TableColumn prefWidth="20" text="no" fx:id="nameColumn"/>
+                    <TableColumn prefWidth="100" text="StartTime" fx:id="startColumn"/>
+                    <TableColumn prefWidth="100" text="EndTime" fx:id="endColumn"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <VBox alignment="CENTER">
+                <padding>
+                    <Insets top="20" left="200"/>
+                </padding>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Name  :  " prefWidth="50"/>
+                    <JFXTextField prefWidth="72" fx:id="nameField"/>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Start : " prefWidth="50"/>
+                    <JFXTextField prefWidth="30" fx:id="startHourField"/>
+                    <Label text=":" alignment="CENTER" prefWidth="12"/>
+                    <JFXTextField prefWidth="30" fx:id="startMinuteField"/>
+                    <HBox alignment="CENTER">
+                        <JFXButton text="Add" fx:id="addBtn"></JFXButton>
+                        <Label prefWidth="20"/>
+                        <JFXButton text="Remove" fx:id="removeBtn"></JFXButton>
+                        <HBox.hgrow>
+                            <Priority fx:constant="ALWAYS"/>
+                        </HBox.hgrow>
+                    </HBox>
+                    <VBox.margin>
+                        <Insets top="20" bottom="20"/>
+                    </VBox.margin>
+                </HBox>
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="End :  " prefWidth="50"/>
+                    <JFXTextField prefWidth="30" fx:id="endHourField"/>
+                    <Label text=":" alignment="CENTER" prefWidth="12"/>
+                    <JFXTextField prefWidth="30" fx:id="endMinuteField"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets bottom="20"/>
+            </padding>
+            <JFXButton text="Save" styleClass="handle-button" prefWidth="80" fx:id="saveBtn"/>
+            <Label prefWidth="20"/>
+            <JFXButton text="Cancel" styleClass="handle-button" prefWidth="80" fx:id="cancelBtn"/>
+        </HBox>
+    </bottom>
+</fx:root>
