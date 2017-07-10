@@ -13,7 +13,7 @@ public class JsonManager {
     public static String makeRespInfo(Info info) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("type", "response");
-        jsonObject.put("msg", new Gson().toJson(info));
+        jsonObject.put("msg", new JSONObject().put("id", info.getId()).put("ip", info.getIp()));
         return jsonObject.toString();
     }
 
