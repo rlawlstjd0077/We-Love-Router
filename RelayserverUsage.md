@@ -11,8 +11,8 @@
 | Resource URI | 10.156.145.163:9000/service?{ parameter } |
 | HTTP Method  | Get Method                               |
 
-..
-..
+<br>
+<br>
 
 ### - Querystring Parameters
 
