@@ -4,7 +4,7 @@
 
 
 
-### - 기본정보
+ ### - 기본정보
 
 | title        | desc                                     |
 | ------------ | ---------------------------------------- |
@@ -13,7 +13,7 @@
 <br>
 <br>
 
-### - Querystring Parameters
+ ### - Querystring Parameters
 
 | Name | Data Type | Example                                  | Description                              |
 | ---- | --------- | :--------------------------------------- | ---------------------------------------- |
@@ -22,7 +22,7 @@
 <br>
 <br>
 
-### - Response Parameters
+ ### - Response Parameters
 
 | Name | Data Type | Example                                  | Description                              |
 | ---- | --------- | :--------------------------------------- | ---------------------------------------- |
@@ -31,10 +31,10 @@
 <br>
 <br>
 
-### - Error code
+ ### - Error code
 
-| Error code | Message        | HTTP Status Code          |
-| ---------- | -------------- | ------------------------- |
-| 1005       | 시스템 오류 입니다.    | 500 Internal Server Error |
-| 1100       | 요청 데이터 오류 입니다. | 400 Bad Request           |
-| -          | 성공적으로 수행되었습니다. | 200 OK                    |
+| Message        | HTTP Status Code          |
+| -------------- | ------------------------- |
+| 시스템 오류 입니다.    | 500 Internal Server Error |
+| 요청 데이터 오류 입니다. | 400 Bad Request           |
+| 성공적으로 수행되었습니다. | 200 OK                    |
