@@ -27,11 +27,7 @@
 | Name | Data Type | Example                                  | Description                              |
 | ---- | --------- | :--------------------------------------- | ---------------------------------------- |
 | type | String    | "get_info_resp"                          | 기능의 옵션 정보 응답 입니다. <br><br> get_info_resp : 입력된 id에 맞는 ip 를 반환<br>get_info_list_resp : RFI 혹은 제어시스템의 모든 info 들을 반환 <br>reg_info_reps : ip 와 id 값을 등록(변경) |
-<<<<<<< HEAD
-| data | String    | data : [<br> ip : 10.156.145.163,<br> id: RFI_30101<br>] | 각 동작의 성공적 응답의 예시 입니다. <br> <br>  &lt; response 예시 &gt; <br> get_info :  <br>  &nbsp; data : { <br>&nbsp; &nbsp;  id : RFI_30107, <br> &nbsp; &nbsp; ip :10.156.145.163  <br> &nbsp; } <br><br> get_info_list : <br> &nbsp;data : [ <br> &nbsp;&nbsp;  { <br> &nbsp;&nbsp;&nbsp; id : RFI_30107,  <br> &nbsp; &nbsp; &nbsp; ip : 10.156.175.45<br> &nbsp;&nbsp;&nbsp;&nbsp; }, <br> &nbsp; &nbsp; { &nbsp; &nbsp; &nbsp; id : RFI_30106, <br> &nbsp; &nbsp; &nbsp; ip : 10.156.175.45 <br> &nbsp; &nbsp; } <br> &nbsp; ]&nbsp; <br> &nbsp; } <br><br> reg_info :<br> &nbsp; data : { <br> &nbsp; &nbsp; msg : 성공적으로 처리됨  <br> &nbsp; } |
-=======
-| data | String    | data : [<br> ip : 10.156.145.163,<br> id: RFI_30101<br>] |각 동작의 성공적 응답의 예시 입니다. <br> <br>   response 예시  <br> get_info :  <br>   data : { <br>   id : RFI30107, <br>   ip :10.156.145.163  <br>  } <br><br> get_info_list : <br> data : [ <br> &nbsp;  { <br> &nbsp; id : RFI30107,  <br>    ip : 10.156.175.45<br> &nbsp;&nbsp; }, <br>   {    id : RFI_30106, <br>    ip : 10.156.175.45 <br>   } <br>  ] <br>  } <br><br> reg_info :<br>  data : { <br>   msg : 성공적으로 처리됨  <br>  } |
->>>>>>> 24dd6d3b787e380e4741f2fbbe1c132ee5349ba7
+| data | String    | data : [<br> ip : 10.156.145.163,<br> id: RFI_30101<br>] | 각 동작의 성공적 응답의 예시 입니다. <br> <br>  &lt; response 예시 &gt; <br> get_info :  <br>  &nbsp; data : { <br>&nbsp; &nbsp;  id : RFI_30107, <br> &nbsp; &nbsp; ip :10.156.145.163  <br> &nbsp; } <br><br> get_info_list : <br> &nbsp;data : [ <br> &nbsp;&nbsp;  { <br> &nbsp;&nbsp;&nbsp; &nbsp; id : RFI_30107,  <br> &nbsp; &nbsp; &nbsp; ip : 10.156.175.45<br> &nbsp;&nbsp;&nbsp;&nbsp; }, <br> &nbsp; &nbsp; { &nbsp; &nbsp; <br> &nbsp;&nbsp;  id : RFI_30106, <br> &nbsp; &nbsp; &nbsp; ip : 10.156.175.45 <br> &nbsp; &nbsp; } <br> &nbsp; ]&nbsp; <br> &nbsp; } <br><br> reg_info :<br> &nbsp; data : { <br> &nbsp; &nbsp; msg : 성공적으로 처리됨  <br> &nbsp; } |
 <br>
 <br>
 
