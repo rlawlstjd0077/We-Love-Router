@@ -19,7 +19,7 @@ public class InfoDAO {
     private InfoDAO() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auth?useSSL=true", "root", "4112665aa");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/info?useSSL=true", "root", "4112665aa");
             st = connection.createStatement();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -29,16 +29,24 @@ public class InfoDAO {
         System.out.print("DB 연결 성공");
     }
 
-    private boolean insertAuth(String ip, String id) throws SQLException {
-        String sql = "insert into auth(id, ip) values (?, ?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, ip);
-        preparedStatement.setString(2, id);
-        preparedStatement.execute();
-        return true;
+    public void insertAuth(String id, String ip) throws SQLException {
+        String selectSql = "select * from " + TABLE_NAME + " where id = '" + id + "'";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(selectSql);
+        rs.next();
+        if(rs.getString("id") != null){
+            String updateSql = "update " + TABLE_NAME + " set ip = '" + ip + "' where id = '" + id + "'";
+            statement.executeUpdate(updateSql);
+        } else {
+            String insertSql = "insert into " + TABLE_NAME + " (id, ip) values (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setString(1, ip);
+            preparedStatement.setString(2, id);
+            preparedStatement.execute();
+        }
     }
 
-    private Info getInfo(String id) throws SQLException {
+    public Info getInfo(String id) throws SQLException {
         String sql = "select * from " + TABLE_NAME + " where id = '" + id + "'";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
@@ -46,7 +54,7 @@ public class InfoDAO {
         return new Info(rs.getString("id"), rs.getString("ip"));
     }
 
-    private ArrayList<Info> getInfoList(String type) throws SQLException {
+    public ArrayList<Info> getInfoList(String type) throws SQLException {
         ArrayList<Info> infoList = new ArrayList<>();
         String sql = "select * from " + TABLE_NAME + " where id like '"+ type +"%'";
         Statement statement = connection.createStatement();

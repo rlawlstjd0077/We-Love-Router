@@ -12,15 +12,15 @@ import java.util.ArrayList;
 public class JsonManager {
     public static String makeRespInfo(Info info) {
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "response");
-        jsonObject.put("msg", new Gson().toJson(info));
+        jsonObject.put("type", "get_info_resp");
+        jsonObject.put("data", new JSONObject().put("id", info.getId()).put("ip", info.getIp()));
         return jsonObject.toString();
     }
 
     public static String makeRespInfoList(ArrayList<Info> infoList) {
         JSONObject jsonObject = new JSONObject();
         JSONArray jsonArray = new JSONArray();
-        jsonObject.put("type", "response");
+        jsonObject.put("type", "get_info_list_resp");
 
         for(Info info : infoList){
             JSONObject object = new JSONObject();
@@ -28,14 +28,14 @@ public class JsonManager {
             object.put("ip", info.getIp());
             jsonArray.put(object);
         }
-        jsonObject.put("msg", jsonArray);
+        jsonObject.put("data", jsonArray);
         return jsonObject.toString();
     }
 
-    public static String makeResp(String message){
+    public static String makeResp(String type, String message){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("type", "response");
-        jsonObject.put("msg", message);
+        jsonObject.put("type", type);
+        jsonObject.put("data", message);
         return jsonObject.toString();
     }
 }
