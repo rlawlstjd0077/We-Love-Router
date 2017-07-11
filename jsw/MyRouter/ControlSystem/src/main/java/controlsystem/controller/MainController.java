@@ -1,15 +1,17 @@
 package controlsystem.controller;
 
 import com.jfoenix.controls.JFXButton;
+import controlsystem.manager.JsonManager;
 import controlsystem.manager.SocketClientManager;
 import controlsystem.manager.SocketConnector;
-import controlsystem.manager.SocketListener;
+import controlsystem.manager.SocketServerManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -43,9 +46,12 @@ public class MainController implements Initializable {
     private JFXButton connectionListBtn;
     @FXML
     private JFXButton refreshBtn;
+    @FXML
+    private ComboBox<String> connectedListComboBox;
+    private ArrayList<SocketServerManager.Emulator> EmulatorList;
+    private SocketServerManager socketServerManager;
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
-
 
     private void menuHandle(MouseEvent event) {
         Stage newStage;
@@ -55,11 +61,11 @@ public class MainController implements Initializable {
                 newStage = settingNewState(new Scene(wireLessSettingController), "WireLessSetting");
                 newStage.setOnHidden(event1 -> {
                     if(wireLessSettingController.isSaveState()){
-                        try {
-                            SocketConnector.sendMsg(wireLessSettingController.toString());
+                        if(connectedListComboBox.getValue() != null) {
+                            findClientFromAddress(connectedListComboBox.getValue()).setSendData(wireLessSettingController.toString());
                             logger.info("Wireless Setting Changed");
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        } else {
+                            makeErrorAlert("Error", "Emulator not selected", "Try after select emulator").show();
                         }
                     }
                 });
@@ -70,12 +76,7 @@ public class MainController implements Initializable {
                 newStage = settingNewState(new Scene(portForwardSettingController), "PortForwardSetting");
                 newStage.setOnHidden(event1 -> {
                     if(portForwardSettingController.isSaveState()){
-                        try {
-                            SocketConnector.sendMsg(portForwardSettingController.toString());
-                            logger.info("PortForward Setting Changed");
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        logger.info("PortForward Setting Changed");
                     }
                 });
                 newStage.showAndWait();
@@ -141,34 +142,35 @@ public class MainController implements Initializable {
     }
 
     private void powerHandle(){
-        if(powerBtn.isSelected()){      // Power On
-            if(!SocketClientManager.isConnectState()){
-                Alert alert = makeErrorAlert("Error Dialog","Emulator power is Off", "Try again" );
-                alert.showAndWait();
-                powerBtn.setSelected(false);
-                return;
-            }
-            LoginController controller = new LoginController();
-            Stage newStage = settingNewState(new Scene(controller), "Login");
-            newStage.setOnHidden(event -> {
-                if(controller.getLoginState()){
-                    setButtonsDisable(false);
-//                    emulator.setPowerState(true);
-                }else{
-                    powerBtn.setSelected(false);
-                }
-            });
-            newStage.showAndWait();
-        }else{                          //Power Off
-            logger.info("Emulator Power is Off");
-            setButtonsDisable(true);
-            systemPowerOff();
-            try {
-                SocketConnector.sendMsg(new JSONObject().put("type", "powerOff").toString());
-            } catch (JSONException e) {
-            } catch (IOException e) {
-            }
+        if(powerBtn.isSelected()) {      // Power On
+            setButtonsDisable(false);
         }
+//            if(!SocketClientManager.isConnectState()){
+//                Alert alert = makeErrorAlert("Error Dialog","Emulator power is Off", "Try again" );
+//                alert.showAndWait();
+//                powerBtn.setSelected(false);
+//                return;
+//            }
+//            LoginController controller = new LoginController();
+//            Stage newStage = settingNewState(new Scene(controller), "Login");
+//            newStage.setOnHidden(event -> {
+//                if(controller.getLoginState()){
+//                    setButtonsDisable(false);
+//                }else{
+//                    powerBtn.setSelected(false);
+//                }
+//            });
+//            newStage.showAndWait();
+//        }else{                          //Power Off
+//            logger.info("Emulator Power is Off");
+//            setButtonsDisable(true);
+//            systemPowerOff();
+//            try {
+//                SocketConnector.sendMsg(new JSONObject().put("type", "powerOff").toString());
+//            } catch (JSONException e) {
+//            } catch (IOException e) {
+//            }
+//        }
     }
 
     @Override
@@ -182,6 +184,7 @@ public class MainController implements Initializable {
         refreshBtn.setOnMouseClicked(event -> menuHandle(event));
         powerBtn.setOnMouseClicked(event -> powerHandle());
         setButtonsDisable(true);
+        EmulatorList = new ArrayList<>();
 
         SocketClientManager manager = new SocketClientManager();
         manager.start();
@@ -194,6 +197,52 @@ public class MainController implements Initializable {
                 });
             }
         });
+        socketServerManager = new SocketServerManager();
+        socketServerManager.setmOnRPIConnectedListener(RPIList -> {
+            this.EmulatorList = RPIList;
+            setConnectedListComboBox();
+        });
+        socketServerManager.startServer();
+        JsonManager.readConfigFile();
+    }
+
+    private void setConnectedListComboBox(){
+        //현재 선택된 Val을 가져와 비교를 해서 연결이 끊기면
+        try {
+            String selectedVal = connectedListComboBox.getValue();
+            String settingVal = EmulatorList.get(0).getSocketChannel().getRemoteAddress().toString();
+
+            for(SocketServerManager.Emulator client : EmulatorList) {
+                String tempVal = client.getSocketChannel().getRemoteAddress().toString();
+                if(tempVal.equals(selectedVal)){
+                    settingVal = tempVal;
+                }
+            }
+
+            connectedListComboBox.getItems().clear();
+            for (SocketServerManager.Emulator client : EmulatorList) {
+                connectedListComboBox.getItems().add(client.getSocketChannel().getRemoteAddress().toString());
+            }
+            String finalSettingVal = settingVal;
+            Platform.runLater(() -> {
+                connectedListComboBox.setValue(finalSettingVal);
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private SocketServerManager.Emulator findClientFromAddress(String remoteAddress){
+        try {
+            for (SocketServerManager.Emulator client : EmulatorList) {
+                if (client.getSocketChannel().getRemoteAddress().toString().equals(remoteAddress)){
+                    return client;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private void systemPowerOff(){

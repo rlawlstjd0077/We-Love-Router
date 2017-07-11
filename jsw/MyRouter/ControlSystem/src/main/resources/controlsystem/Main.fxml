@@ -9,10 +9,11 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.control.ComboBox?>
 <GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@main.css"
           fx:controller="controlsystem.controller.MainController"
           prefHeight="400.0" prefWidth="800.0">
-    <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="TOP_LEFT">
+    <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_LEFT" >
         <HBox prefHeight="10" minHeight="10" >
             <ImageView fitWidth="22" fitHeight="22">
                 <Image url="@commons/image/powerIcon.png"/>
@@ -23,6 +24,11 @@
             <RadioButton fx:id="powerBtn" styleClass="radio-power">
 
             </RadioButton>
+            <ComboBox prefWidth="240" fx:id="connectedListComboBox">
+                <HBox.margin>
+                    <Insets left="60"/>
+                </HBox.margin>
+            </ComboBox>
             <VBox.margin>
                 <Insets top="20" left="20"/>
             </VBox.margin>

@@ -7,6 +7,7 @@ import emulator.manger.listener.DHCPPowerListener;
 import emulator.manger.network.ControlSystemSocketListener;
 import emulator.manger.network.ControlSystemSocketManager;
 import emulator.manger.network.DeviceSocketManager;
+import emulator.manger.network.SocketManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class Emulator extends Equipment {
     private static final Logger logger = LoggerFactory.getLogger(Emulator.class);
     private Config settingData;
+    private SocketManager socketManager;
 
     public void startEmulator(){
         logger.info("Router Emulator is on");
@@ -27,23 +29,11 @@ public class Emulator extends Equipment {
         DeviceSocketManager deviceListener = new DeviceSocketManager();
         deviceListener.start();
 
-        ControlSystemSocketListener controlSysListener = new ControlSystemSocketListener();
-
-        controlSysListener.setmOnMessageReceived(msg -> {
-            try {
-                settingChangeHandler(msg);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-        controlSysListener.start();
         refresh();
-
+        socketManager = new SocketManager();
         try {
-            ControlSystemSocketManager.sendMsg(JSONManager.bindConfigMsg(JSONManager.readConfigFile()));
-            DeviceSocketManager.sendConList();
+            socketManager.startSocketManager();
         } catch (IOException e) {
-        } catch (JSONException e) {
         }
     }
 

@@ -166,3 +166,69 @@
 .table-view > .virtual-flow > .scroll-bar > .decrement-button {
     -fx-opacity: 0;
 }
+/* ComboBox */
+.combo-box{
+    -fx-background-color:#ffffff;
+    -fx-background-insets: 0;
+    -fx-border-color: #B3B9BF;
+    -fx-border-radius: 2px;
+    -fx-padding: -3,0,-3,0;
+    -fx-font-family: "Roboto";
+    -fx-font-size : 14;
+}
+.combo-box > .arrow-button{
+    -fx-background-image:url("images/icons/combobox_down.png");
+    -fx-background-position:center;
+    -fx-background-repeat: no-repeat no-repeat;
+}
+.combo-box:hover{
+    -fx-border-color:#2196F3;
+}
+.combo-box:focused{
+    -fx-border-color:#2196F3;
+    -fx-effect: dropshadow(three-pass-box, rgba(65,137,221,0.8), 4, 0, 0, 0);
+
+}
+.combo-box .list-view{
+    -fx-border-color:#2196F3;
+    -fx-effect: dropshadow(three-pass-box, rgba(65,137,221,0.8), 4, 0, 0, 0);
+}
+.combo-box .list-view .list-cell:odd{
+    -fx-background-color:#EFF2F7;
+}
+.combo-box .scroll-bar{
+    -fx-background-color:transparent;
+}
+.combo-box > .arrow-button > .arrow{
+    -fx-background-color: transparent;
+}
+.combo-box .list-view .list-cell{
+    -fx-background-insets:0;
+    -fx-background-color:white;
+}
+.combo-box .list-view .list-cell:hover{
+    -fx-background-color: #2196F3;
+    -fx-focus-color: #2196F3;
+}
+.combo-box .list-view .list-cell:focused,
+.combo-box .list-view .list-cell:armed{
+    -fx-background-color: #2196F3;
+    -fx-border-color: #2196F3;
+    -fx-background-insets:0;
+}
+.combo-box .scroll-bar:vertical .thumb{
+    -fx-background-color: #B2B7BB;
+    -fx-background-insets: 2.5;
+}
+.combo-box .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+.combo-box .scroll-bar:vertical .decrement-arrow{
+    -fx-background-color:transparent;
+}
+.combo-box .scroll-bar:vertical .increment-arrow{
+    -fx-background-color:transparent;
+}
+.combo-box:disabled{
+    -fx-opacity : 0.6;
+}
