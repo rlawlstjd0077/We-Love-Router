@@ -29,13 +29,21 @@ public class InfoDAO {
         System.out.print("DB 연결 성공");
     }
 
-    public boolean insertAuth(String ip, String id) throws SQLException {
-        String sql = "insert into "+ TABLE_NAME +" (id, ip) values (?, ?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, ip);
-        preparedStatement.setString(2, id);
-        preparedStatement.execute();
-        return true;
+    public void insertAuth(String id, String ip) throws SQLException {
+        String selectSql = "select * from " + TABLE_NAME + " where id = '" + id + "'";
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(selectSql);
+        rs.next();
+        if(rs.getString("id") != null){
+            String updateSql = "update " + TABLE_NAME + " set ip = '" + ip + "' where id = '" + id + "'";
+            statement.executeUpdate(updateSql);
+        } else {
+            String insertSql = "insert into " + TABLE_NAME + " (id, ip) values (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+            preparedStatement.setString(1, ip);
+            preparedStatement.setString(2, id);
+            preparedStatement.execute();
+        }
     }
 
     public Info getInfo(String id) throws SQLException {
