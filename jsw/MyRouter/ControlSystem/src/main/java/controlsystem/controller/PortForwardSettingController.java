@@ -1,13 +1,13 @@
 package controlsystem.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.PortForward;
-import controlsystem.data.PortForwardData;
+import controlsystem.data.config.Config;
+import controlsystem.data.config.PortForward;
+import controlsystem.data.config.PortForwardData;
+import controlsystem.manager.SocketServerManager;
 import controlsystem.viewmodel.PortForwardDataViewModel;
 import controlsystem.viewmodel.PortForwardTableRowViewModel;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -61,19 +61,21 @@ public class PortForwardSettingController extends BorderPane{
     private TableColumn<PortForwardTableRowViewModel, Integer> intPortTableColumn;
 
     private boolean saveState;
+    private SocketServerManager.Emulator emulator;
 
-    public PortForwardSettingController(){
+    public PortForwardSettingController(SocketServerManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        this.emulator = emulator;
         nameTableColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         ipTableColumn.setCellValueFactory(cellData -> cellData.getValue().ipProperty());
         extPortTableColumn.setCellValueFactory(cellData -> cellData.getValue().intPortProperty().asObject());
         intPortTableColumn.setCellValueFactory(cellData -> cellData.getValue().extPortProperty().asObject());
-        portForwardTable.setItems(PortForwardDataViewModel.getDatas());
+        portForwardTable.setItems(PortForwardDataViewModel.getDatas(emulator));
 
         addBtn.setOnMouseClicked(event -> {
             PortForwardTableRowViewModel viewModel = new PortForwardTableRowViewModel(new SimpleStringProperty(nameField.getText()),
@@ -107,7 +109,7 @@ public class PortForwardSettingController extends BorderPane{
             list.add(portForward);
         }
         PortForward portForwardData = new PortForward(list);
-        Config.configFile.setPortForward(portForwardData);
+        emulator.getConfig().setPortForward(portForwardData);
         JSONObject object = new JSONObject();
         try {
             object.put("data", new Gson().toJson(portForwardData));

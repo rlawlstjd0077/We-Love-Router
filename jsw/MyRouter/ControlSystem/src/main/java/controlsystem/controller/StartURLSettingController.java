@@ -4,8 +4,9 @@ import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.StartURL;
+import controlsystem.data.config.Config;
+import controlsystem.data.config.StartURL;
+import controlsystem.manager.SocketServerManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -26,15 +27,16 @@ public class StartURLSettingController extends BorderPane{
     private JFXTextField urlField;
 
     private boolean saveState;
+    private SocketServerManager.Emulator emulator;
 
-    public StartURLSettingController(){
+    public StartURLSettingController(SocketServerManager.Emulator emulator){
         try {
             UiUtil.loadFxml(    this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        StartURL data = Config.configFile.getStartUrl();
+        this.emulator = emulator;
+        StartURL data = emulator.getConfig().getStartUrl();
         urlField.setText(data.getUrl());
         saveBtn.setOnMouseClicked(event -> {
             ((Stage) getScene().getWindow()).close();
@@ -49,7 +51,7 @@ public class StartURLSettingController extends BorderPane{
 
     public String toString(){
         StartURL startURL = new StartURL(urlField.getText());
-        Config.configFile.setStartUrl(startURL);
+        emulator.getConfig().setStartUrl(startURL);
         JSONObject object = null;
         try {
             object = new JSONObject();

@@ -1,6 +1,9 @@
 package controlsystem.manager;
 
-import controlsystem.controller.MainController;
+import com.google.gson.Gson;
+import controlsystem.data.config.Config;
+import controlsystem.data.config.ConnectionList;
+import controlsystem.data.json.Packet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +20,11 @@ import java.util.Set;
  * Created by dsm_045 on 2017-07-11.
  */
 public class SocketServerManager {
-    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SocketServerManager.class);
 
     public interface OnRPIConnectedListener {
-        public void onConnected(ArrayList<Emulator> emulatorList);
+        public void onConnect(Emulator emulator);
+        public void onDisConnect(Emulator emulator);
     }
 
     public OnRPIConnectedListener mOnRPIConnected;
@@ -29,98 +33,92 @@ public class SocketServerManager {
         this.mOnRPIConnected = mOnRPIConnected;
     }
 
+    public interface OnMessageReceiveListener {
+        public void onReceive(Emulator emulator, String packetMessage);
+    }
+
+    public OnMessageReceiveListener mOnMessageReceived;
+
+    public void setmOnMessageReceivedListener(OnMessageReceiveListener mOnMessageReceived) {
+        this.mOnMessageReceived = mOnMessageReceived;
+    }
+
     Selector selector;
-    ServerSocketChannel serverSocketChannel;
     ArrayList<Emulator> connections = new ArrayList<>();
 
-    public void startServer() {
-        try {
-            selector = Selector.open(); // Selector 생성
-            serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.configureBlocking(false); // 넌블로킹으로 설정
-            serverSocketChannel.bind(new InetSocketAddress(5001));
-            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        } catch (Exception e) {
-            if (serverSocketChannel.isOpen()) {
-                stopServer();
-            }
-            return;
-        }
-
+    public void startSocketManager() throws IOException {
         Thread thread = new Thread(() -> {
-            logger.debug("Socket Server Started");
-            while (true) {
-                try {
+            try {
+                selector = Selector.open();
+
+                InetSocketAddress hostAddress = new InetSocketAddress("localhost", 5001);
+                SocketChannel channel = SocketChannel.open(hostAddress);
+                channel.configureBlocking(false);
+                Emulator emulator = new Emulator(channel);
+                connections.add(emulator);
+                mOnRPIConnected.onConnect(emulator);
+                channel.register(selector, SelectionKey.OP_READ);
+                hostAddress = new InetSocketAddress("localhost", 5002);
+                channel = SocketChannel.open(hostAddress);
+                channel.configureBlocking(false);
+                emulator = new Emulator(channel);
+                connections.add(emulator);
+                mOnRPIConnected.onConnect(emulator);
+                channel.register(selector, SelectionKey.OP_READ);
+
+                while (true) {
                     int keyCount = selector.select();
                     if (keyCount == 0) {
                         continue;
                     }
+
                     Set<SelectionKey> selectedKeys = selector.selectedKeys();
                     Iterator<SelectionKey> iterator = selectedKeys.iterator();
 
                     while (iterator.hasNext()) {
                         SelectionKey selectionKey = iterator.next();
 
-                        if (selectionKey.isAcceptable()) {
-                            accept(selectionKey);
-                        } else if (selectionKey.isReadable()) {
-                            receive(selectionKey);
+                        if (selectionKey.isReadable()) {
+                            read(selectionKey);
                         } else if (selectionKey.isWritable()) {
                             send(selectionKey);
                         }
                         iterator.remove();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    if (serverSocketChannel.isOpen()) {
-                        stopServer();
-                    }
-                    break;
                 }
+            } catch (ClosedChannelException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
         thread.start();
     }
 
-    void receive(SelectionKey selectionKey) {
+    void read(SelectionKey selectionKey) {
         SocketChannel socketChannel = (SocketChannel) selectionKey.channel();
+        Emulator emulator = getClientFromSocketChannel(socketChannel);
         try {
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
             int byteCount = socketChannel.read(byteBuffer);
             byteBuffer.flip();
 
             if (byteCount == -1) {
-                throw new IOException();
+                return;
             }
             Charset charset = Charset.forName("UTF-8");
             String data = charset.decode(byteBuffer).toString();
 
             logger.debug("Receive message : " + data + " from " + socketChannel.getRemoteAddress());
+            PacketHandler.handle(emulator, data);
             byteBuffer.flip();
 
         } catch (Exception e) {
             try {
-                //TODO 통신 안됨 처리
-                connections.remove(this);
+                connections.remove(emulator);
                 socketChannel.close();
+                mOnRPIConnected.onDisConnect(emulator);
             } catch (IOException e2) {
-            }
-        }
-    }
-
-    void accept(SelectionKey selectionKey) {
-        try {
-            ServerSocketChannel serverSocketChannel = (ServerSocketChannel) selectionKey.channel();
-            SocketChannel socketChannel = serverSocketChannel.accept();
-            Emulator client = new Emulator(socketChannel);
-            logger.debug("Connected " + socketChannel.getRemoteAddress());
-            connections.add(client);
-            mOnRPIConnected.onConnected(connections);
-            selectionKey.attach(client);
-            socketChannel.register(selector, SelectionKey.OP_READ);
-        } catch (Exception e) {
-            if (serverSocketChannel.isOpen()) {
-                stopServer();
             }
         }
     }
@@ -132,14 +130,12 @@ public class SocketServerManager {
         if(client.getSendData() != null) {
             try {
                 Charset charset = Charset.forName("UTF-8");
-                ByteBuffer byteBuffer = charset.encode(client.getSendData());
+                ByteBuffer byteBuffer = charset.encode(new Gson().toJson(client.getSendData()));
 
                 socketChannel.write(byteBuffer);
                 client.setSendData(null);
             } catch (Exception e) {
                 try {
-                    String msg = "[클라이언트 통신 안됨: " + socketChannel.getRemoteAddress() + ": "
-                            + Thread.currentThread().getName() + "]";
                     connections.remove(this);
                     socketChannel.close();
                 } catch (IOException e2) {
@@ -164,8 +160,11 @@ public class SocketServerManager {
     }
 
     public class Emulator {
-        SocketChannel socketChannel;
-        String sendData = null;
+        private SocketChannel socketChannel;
+        private Packet sendData = null;
+        private boolean loginState;
+        private Config config;
+        private ConnectionList connectionList;
 
         Emulator(SocketChannel socketChannel) throws IOException {
             this.socketChannel = socketChannel;
@@ -180,11 +179,11 @@ public class SocketServerManager {
             this.socketChannel = socketChannel;
         }
 
-        public String getSendData() {
+        public Packet getSendData() {
             return sendData;
         }
 
-        public void setSendData(String sendData) {
+        public void setSendData(Packet sendData) {
             this.sendData = sendData;
             try {
                 socketChannel.register(selector, SelectionKey.OP_WRITE);
@@ -193,27 +192,29 @@ public class SocketServerManager {
                 e.printStackTrace();
             }
         }
-    }
 
-    void stopServer() {
-        logger.debug("Stopped server");
-        try {
-            Iterator<Emulator> iterator = connections.iterator();
+        public boolean isLoginState() {
+            return loginState;
+        }
 
-            while (iterator.hasNext()) {
-                Emulator client = iterator.next();
-                client.socketChannel.close();
-                iterator.remove();
-            }
+        public void setLoginState(boolean loginState) {
+            this.loginState = loginState;
+        }
 
-            if (serverSocketChannel != null && serverSocketChannel.isOpen()) {
-                serverSocketChannel.close();
-            }
+        public Config getConfig() {
+            return config;
+        }
 
-            if (selector != null && selector.isOpen()) {
-                selector.close();
-            }
-        } catch (Exception e) {
+        public void setConfig(Config config) {
+            this.config = config;
+        }
+
+        public ConnectionList getConnectionList() {
+            return connectionList;
+        }
+
+        public void setConnectionList(ConnectionList connectionList) {
+            this.connectionList = connectionList;
         }
     }
 }

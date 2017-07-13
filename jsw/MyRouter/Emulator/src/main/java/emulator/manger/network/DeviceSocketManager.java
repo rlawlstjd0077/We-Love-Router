@@ -1,8 +1,8 @@
 package emulator.manger.network;
 
 import com.google.gson.Gson;
-import emulator.data.Connection;
-import emulator.data.ConnectionList;
+import emulator.data.config.Connection;
+import emulator.data.config.ConnectionList;
 import emulator.manger.listener.TimeListener;
 import emulator.manger.emulator.DHCPManager;
 import emulator.manger.listener.DHCPPowerListener;

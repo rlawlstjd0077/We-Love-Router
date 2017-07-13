@@ -50,9 +50,9 @@ public class UiUtil {
 
 
     /**
-     * FXML을 Controller 이름을 기반으로 추출하여 읽고 등록.
+     * FXML을 MyController 이름을 기반으로 추출하여 읽고 등록.
      *
-     * @param controller Controller 인스턴스.
+     * @param controller MyController 인스턴스.
      * @throws IOException 파일이 없을 때 발생.
      */
     public static void loadFxml(Parent controller) throws IOException {

@@ -29,20 +29,25 @@ public class InfoDAO {
         System.out.print("DB 연결 성공");
     }
 
-    public void insertAuth(String id, String ip) throws SQLException {
+    public void insertAuth(String id, String ip) {
         String selectSql = "select * from " + TABLE_NAME + " where id = '" + id + "'";
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery(selectSql);
-        rs.next();
-        if(rs.getString("id") != null){
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(selectSql);
+            rs.next();
+            rs.getString("id");
             String updateSql = "update " + TABLE_NAME + " set ip = '" + ip + "' where id = '" + id + "'";
             statement.executeUpdate(updateSql);
-        } else {
-            String insertSql = "insert into " + TABLE_NAME + " (id, ip) values (?, ?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
-            preparedStatement.setString(1, ip);
-            preparedStatement.setString(2, id);
-            preparedStatement.execute();
+        } catch (SQLException e){
+            try {
+                String insertSql = "insert into " + TABLE_NAME + " (id, ip) values (?, ?)";
+                PreparedStatement preparedStatement = connection.prepareStatement(insertSql);
+                preparedStatement.setString(1, id);
+                preparedStatement.setString(2, ip);
+                preparedStatement.execute();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -56,10 +61,10 @@ public class InfoDAO {
 
     public ArrayList<Info> getInfoList(String type) throws SQLException {
         ArrayList<Info> infoList = new ArrayList<>();
-        String sql = "select * from " + TABLE_NAME + " where id like '"+ type +"%'";
+        String sql = "select * from " + TABLE_NAME + " where id like '" + type + "%'";
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery(sql);
-        while(rs.next()){
+        while (rs.next()) {
             Info info = new Info(rs.getString("id"), rs.getString("ip"));
             infoList.add(info);
         }

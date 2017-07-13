@@ -15,13 +15,18 @@
           prefHeight="400.0" prefWidth="800.0">
     <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_LEFT" >
         <HBox prefHeight="10" minHeight="10" >
+            <Label text="AP" prefWidth="48">
+                <HBox.margin>
+                    <Insets top="3"/>
+                </HBox.margin>
+            </Label>
             <ImageView fitWidth="22" fitHeight="22">
                 <Image url="@commons/image/powerIcon.png"/>
                 <HBox.margin>
                     <Insets right="4"/>
                 </HBox.margin>
             </ImageView>
-            <RadioButton fx:id="powerBtn" styleClass="radio-power">
+            <RadioButton fx:id="apPowerBtn" styleClass="radio-power">
 
             </RadioButton>
             <ComboBox prefWidth="240" fx:id="connectedListComboBox">
@@ -29,6 +34,23 @@
                     <Insets left="60"/>
                 </HBox.margin>
             </ComboBox>
+            <VBox.margin>
+                <Insets top="20" left="20"/>
+            </VBox.margin>
+        </HBox>
+        <HBox prefHeight="10" minHeight="10" >
+            <Label text="DHCP" prefWidth="36" >
+                <HBox.margin>
+                    <Insets top="3"/>
+                </HBox.margin>
+            </Label>
+            <ImageView fitWidth="22" fitHeight="22">
+                <Image url="@commons/image/powerIcon.png"/>
+                <HBox.margin>
+                    <Insets right="4"/>
+                </HBox.margin>
+            </ImageView>
+            <RadioButton fx:id="dhcpPowerBtn" styleClass="radio-power"/>
             <VBox.margin>
                 <Insets top="20" left="20"/>
             </VBox.margin>

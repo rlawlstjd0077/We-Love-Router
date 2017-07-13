@@ -25,13 +25,7 @@ public class MainController extends HttpServlet {
             switch (type) {
                 case "reg_info":
                     if ((id = req.getParameter("id")) != null && (ip = req.getParameter("ip")) != null) {
-                        try {
-                            infoDAO.insertAuth(id, ip);
-                        } catch (SQLException e) {
-                            resp.setStatus(500);
-                            writer.write(JsonManager.makeResp("reg_info_resp", "서버 오류 발생"));
-                            break;
-                        }
+                        infoDAO.insertAuth(id, ip);
                         resp.setStatus(200);
                         writer.write(JsonManager.makeResp("reg_info_resp", "성공적으로 수행되었습니다"));
                     } else {

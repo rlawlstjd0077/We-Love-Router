@@ -1,9 +1,6 @@
 package controlsystem.viewmodel;
 
-import controlsystem.data.Config;
-import controlsystem.data.Connection;
-import controlsystem.data.PortForwardData;
-import javafx.beans.property.SimpleIntegerProperty;
+import controlsystem.data.config.Connection;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

@@ -5,8 +5,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.DHCP;
+import controlsystem.data.config.Config;
+import controlsystem.data.config.DHCP;
+import controlsystem.manager.SocketServerManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -23,8 +24,6 @@ public class DHCPSettingController extends BorderPane{
     private JFXButton saveBtn;
     @FXML
     private JFXButton cancelBtn;
-    @FXML
-    private JFXToggleButton DHCPPower;
     @FXML
     private JFXTextField startFirstField;
     @FXML
@@ -43,15 +42,16 @@ public class DHCPSettingController extends BorderPane{
     private JFXTextField endFourthField;
 
     private boolean saveState;
+    private SocketServerManager.Emulator emulator;
 
-    public DHCPSettingController(){
+    public DHCPSettingController(SocketServerManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        DHCP data = Config.configFile.getDhcp();
+        this.emulator = emulator;
+        DHCP data = emulator.getConfig().getDhcp();
 
         String[] startIP = data.getStart().split("\\.");
         String[] endIP = data.getEnd().split("\\.");
@@ -73,14 +73,6 @@ public class DHCPSettingController extends BorderPane{
         cancelBtn.setOnMouseClicked(event -> {
             ((Stage) getScene().getWindow()).close();
         });
-
-        DHCPPower.setOnMouseClicked(event -> {
-            if(DHCPPower.isSelected()) {
-                System.out.println("DHCP is On");
-            }else{
-                System.out.println("DHCP is Off");
-            }
-        });
     }
 
     public boolean isSaveState() {
@@ -92,7 +84,7 @@ public class DHCPSettingController extends BorderPane{
               + startThirdField.getText() + "." + startFourthField.getText(),
                 endFirstField.getText() + "." + endSecondField.getText() + "."
               + endThirdField.getText() + "." + endFourthField.getText());
-        Config.getConfigFile().setDhcp(dhcp);
+        emulator.getConfig().setDhcp(dhcp);
         JSONObject object = null;
         try {
             object = new JSONObject();
