@@ -1,28 +1,27 @@
 package controlsystem.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.jfoenix.controls.JFXButton;
 import controlsystem.data.Operation;
 import controlsystem.data.config.Config;
 import controlsystem.data.config.ConnectionList;
 import controlsystem.data.json.Packet;
 import controlsystem.manager.JsonManager;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import org.json.JSONException;
+import org.json.JSONObject;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +54,9 @@ public class MainController implements Initializable {
     private JFXButton refreshBtn;
     @FXML
     private ComboBox<String> connectedListComboBox;
-    private ArrayList<SocketServerManager.Emulator> emulatorList;
-    private SocketServerManager socketServerManager;
-    private SocketServerManager.Emulator emulator;
+    private ArrayList<SocketManager.Emulator> emulatorList;
+    private SocketManager socketManager;
+    private SocketManager.Emulator emulator;
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -69,7 +68,7 @@ public class MainController implements Initializable {
                 newStage = settingNewState(new Scene(wireLessSettingController), "WireLessSetting");
                 newStage.setOnHidden(event1 -> {
                     if (wireLessSettingController.isSaveState()) {
-//                            SocketServerManager.Emulator emulator = findEmulatorFromAddress(connectedListComboBox.getValue());
+//                            SocketManager.Emulator emulator = findEmulatorFromAddress(connectedListComboBox.getValue());
                         emulator.setSendData(sendData(Operation.SET_AP_SETTING, wireLessSettingController.toString()));
                         logger.info("Wireless Setting Changed");
                     }
@@ -127,10 +126,15 @@ public class MainController implements Initializable {
                 break;
             case "refreshBtn":
                 logger.info("Config Refresh");
+                try {
+                    emulator.setSendData(JsonManager.bindPacket(emulator.getSocketChannel().getLocalAddress() + "",
+                            emulator.getSocketChannel().getRemoteAddress() + "", "req", 0, 0, Operation.RESET_ROUTER_SETTINGS, ""));
+                } catch (IOException e) {
+                }
         }
     }
 
-    private Packet sendData(Operation operation, String message){
+    private Packet sendData(Operation operation, String message) {
         try {
             return JsonManager.bindPacket(emulator.getSocketChannel().getLocalAddress() + "", emulator.getSocketChannel().getLocalAddress() + "",
                     "req", 0, 0, operation, message);
@@ -154,14 +158,29 @@ public class MainController implements Initializable {
         refreshBtn.setOnMouseClicked(event -> menuHandle(event));
         apPowerBtn.selectedProperty().addListener((observable, oldValue, newValue) -> {
             // TODO Power 바뀜 서버에 요청
+            try {
+                emulator.setSendData(JsonManager.bindPacket(emulator.getSocketChannel().getLocalAddress() + "", emulator.getSocketChannel().getRemoteAddress() + "",
+                        "req", 0, 0, Operation.SET_AP_POWER, new JSONObject().put("state", newValue).toString()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         });
         dhcpPowerBtn.selectedProperty().addListener((observable, oldValue, newValue) -> {
             // TODO Power 바뀜 서버에 요청
-
+            try{
+                emulator.setSendData(JsonManager.bindPacket(emulator.getSocketChannel().getLocalAddress() + "", emulator.getSocketChannel().getRemoteAddress() + "",
+                        "req", 0, 0, Operation.SET_DHCP_POWER, new JSONObject().put("state", newValue).toString()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
         connectedListComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (connectedListComboBox.getValue() != null) {
-                SocketServerManager.Emulator emulator = findEmulatorFromAddress(newValue);
+                SocketManager.Emulator emulator = findEmulatorFromAddress(newValue);
                 this.emulator = emulator;
                 if (!emulator.isLoginState()) {
                     LoginController loginController = new LoginController(emulator);
@@ -186,35 +205,35 @@ public class MainController implements Initializable {
         setButtonsDisable(true);
         emulatorList = new ArrayList<>();
 
-        socketServerManager = new SocketServerManager();
-        socketServerManager.setmOnRPIConnectedListener(new SocketServerManager.OnRPIConnectedListener() {
+        socketManager = new SocketManager();
+        socketManager.setmOnRPIConnectedListener(new SocketManager.OnRPIConnectedListener() {
             @Override
-            public void onConnect(SocketServerManager.Emulator emulator) {
+            public void onConnect(SocketManager.Emulator emulator) {
                 addEmulator(emulator);
             }
 
             @Override
-            public void onDisConnect(SocketServerManager.Emulator emulator) {
+            public void onDisConnect(SocketManager.Emulator emulator) {
                 removeEmulator(emulator);
             }
         });
 
-        socketServerManager.setmOnMessageReceivedListener((emulator, message) -> {
+        socketManager.setmOnMessageReceivedListener((emulator, message) -> {
             handle(emulator, message);
         });
 
         try {
-            socketServerManager.startSocketManager();
+            socketManager.startSocketManager();
         } catch (IOException e) {
         }
     }
 
-    private void refreshAPDHCPPowerState(){
+    private void refreshAPDHCPPowerState() {
         apPowerBtn.setSelected(emulator.getConfig().getPower().isApPower());
         dhcpPowerBtn.setSelected(emulator.getConfig().getPower().isDhcpPower());
     }
 
-    private void addEmulator(SocketServerManager.Emulator emulator) {
+    private void addEmulator(SocketManager.Emulator emulator) {
         emulatorList.add(emulator);
         try {
             connectedListComboBox.getItems().add(emulator.getSocketChannel().getRemoteAddress() + "");
@@ -222,7 +241,7 @@ public class MainController implements Initializable {
         }
     }
 
-    private void removeEmulator(SocketServerManager.Emulator emulator) {
+    private void removeEmulator(SocketManager.Emulator emulator) {
         try {
             if (this.emulator == emulator) {
                 setButtonsDisable(true);
@@ -233,7 +252,7 @@ public class MainController implements Initializable {
             }
             Platform.runLater(() -> connectedListComboBox.getItems().clear());
             emulatorList.remove(emulator);
-            for (SocketServerManager.Emulator temp : emulatorList) {
+            for (SocketManager.Emulator temp : emulatorList) {
                 connectedListComboBox.getItems().add(temp.getSocketChannel().getRemoteAddress() + "");
             }
         } catch (IOException e) {
@@ -247,9 +266,9 @@ public class MainController implements Initializable {
         setButtonsDisable(true);
     }
 
-    private SocketServerManager.Emulator findEmulatorFromAddress(String remoteAddress) {
+    private SocketManager.Emulator findEmulatorFromAddress(String remoteAddress) {
         try {
-            for (SocketServerManager.Emulator client : emulatorList) {
+            for (SocketManager.Emulator client : emulatorList) {
                 if (client.getSocketChannel().getRemoteAddress().toString().equals(remoteAddress)) {
                     return client;
                 }
@@ -257,11 +276,6 @@ public class MainController implements Initializable {
         } catch (IOException e) {
         }
         return null;
-    }
-
-    private void systemPowerOff() {
-        setButtonsDisable(true);
-        apPowerBtn.setSelected(false);
     }
 
     private Alert makeErrorAlert(String title, String header, String content) {
@@ -292,10 +306,10 @@ public class MainController implements Initializable {
         dhcpPowerBtn.setDisable(state);
     }
 
-    public void handle(SocketServerManager.Emulator emulator, String packetMessage){
+    public void handle(SocketManager.Emulator emulator, String packetMessage) {
         Packet packet = new Gson().fromJson(packetMessage, Packet.class);
 
-        switch (Operation.fromString(packet.getBody().getOperation())){
+        switch (Operation.fromString(packet.getBody().getOperation())) {
             case MODIFY_CONFIG:
                 try {
                     emulator.setConfig(new Gson().fromJson(packet.getBody().getSubValue(), Config.class));

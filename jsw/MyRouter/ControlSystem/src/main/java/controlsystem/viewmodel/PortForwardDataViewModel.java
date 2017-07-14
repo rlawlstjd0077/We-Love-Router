@@ -1,8 +1,7 @@
 package controlsystem.viewmodel;
 
-import controlsystem.data.config.Config;
 import controlsystem.data.config.PortForwardData;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
  * Created by dsm_025 on 2017-04-30.
  */
 public class PortForwardDataViewModel {
-    public static ObservableList<PortForwardTableRowViewModel> getDatas(SocketServerManager.Emulator emulator){
+    public static ObservableList<PortForwardTableRowViewModel> getDatas(SocketManager.Emulator emulator){
         ArrayList<PortForwardTableRowViewModel> list = new ArrayList<>();
         for(PortForwardData portForward : emulator.getConfig().getPortForward().getPortForward_list()){
             PortForwardTableRowViewModel viewModel = new PortForwardTableRowViewModel(new SimpleStringProperty(portForward.getName()),

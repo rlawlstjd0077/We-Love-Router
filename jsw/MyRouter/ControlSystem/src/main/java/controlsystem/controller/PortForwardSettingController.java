@@ -4,10 +4,9 @@ import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.config.Config;
 import controlsystem.data.config.PortForward;
 import controlsystem.data.config.PortForwardData;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import controlsystem.viewmodel.PortForwardDataViewModel;
 import controlsystem.viewmodel.PortForwardTableRowViewModel;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -61,9 +60,9 @@ public class PortForwardSettingController extends BorderPane{
     private TableColumn<PortForwardTableRowViewModel, Integer> intPortTableColumn;
 
     private boolean saveState;
-    private SocketServerManager.Emulator emulator;
+    private SocketManager.Emulator emulator;
 
-    public PortForwardSettingController(SocketServerManager.Emulator emulator){
+    public PortForwardSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {

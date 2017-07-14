@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.control.ComboBox?>
 <GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@main.css"
           fx:controller="controlsystem.controller.MainController"
           prefHeight="400.0" prefWidth="800.0">
@@ -56,7 +52,7 @@
             </VBox.margin>
         </HBox>
     </VBox>
-    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER">
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER" style="-fx-background-color: transparent">
         <GridPane.margin>
             <Insets top="40"/>
         </GridPane.margin>

@@ -5,10 +5,9 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import controlsystem.common.UiUtil;
-import controlsystem.data.config.Config;
 import controlsystem.data.config.TimeLimit;
 import controlsystem.data.config.TimeLimitData;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import controlsystem.viewmodel.TimeLimitDataViewModel;
 import controlsystem.viewmodel.TimeLimitTableRowViewModel;
 import javafx.beans.property.SimpleStringProperty;
@@ -57,9 +56,9 @@ public class TimeLimitSettingController extends BorderPane {
     private JFXTextField nameField;
 
     private boolean saveState;
-    private SocketServerManager.Emulator emulator;
+    private SocketManager.Emulator emulator;
 
-    public TimeLimitSettingController(SocketServerManager.Emulator emulator){
+    public TimeLimitSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {

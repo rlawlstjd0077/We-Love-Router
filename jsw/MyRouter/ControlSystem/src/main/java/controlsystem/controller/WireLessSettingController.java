@@ -5,9 +5,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.config.Config;
 import controlsystem.data.config.Wireless;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,9 +29,9 @@ public class WireLessSettingController extends BorderPane{
     private JFXPasswordField passwordField;
 
     private boolean saveState;
-    private SocketServerManager.Emulator emulator;
+    private SocketManager.Emulator emulator;
 
-    public WireLessSettingController(SocketServerManager.Emulator emulator){
+    public WireLessSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {

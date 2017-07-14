@@ -19,8 +19,8 @@ import java.util.Set;
 /**
  * Created by dsm_045 on 2017-07-11.
  */
-public class SocketServerManager {
-    private static final Logger logger = LoggerFactory.getLogger(SocketServerManager.class);
+public class SocketManager {
+    private static final Logger logger = LoggerFactory.getLogger(SocketManager.class);
 
     public interface OnRPIConnectedListener {
         public void onConnect(Emulator emulator);
@@ -58,13 +58,13 @@ public class SocketServerManager {
                 connections.add(emulator);
                 mOnRPIConnected.onConnect(emulator);
                 channel.register(selector, SelectionKey.OP_READ);
-                hostAddress = new InetSocketAddress("localhost", 5002);
-                channel = SocketChannel.open(hostAddress);
-                channel.configureBlocking(false);
-                emulator = new Emulator(channel);
-                connections.add(emulator);
-                mOnRPIConnected.onConnect(emulator);
-                channel.register(selector, SelectionKey.OP_READ);
+//                hostAddress = new InetSocketAddress("localhost", 5002);
+//                channel = SocketChannel.open(hostAddress);
+//                channel.configureBlocking(false);
+//                emulator = new Emulator(channel);
+//                connections.add(emulator);
+//                mOnRPIConnected.onConnect(emulator);
+//                channel.register(selector, SelectionKey.OP_READ);
 
                 while (true) {
                     int keyCount = selector.select();

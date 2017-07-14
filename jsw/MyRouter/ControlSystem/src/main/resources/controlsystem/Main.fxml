@@ -52,7 +52,7 @@
             </VBox.margin>
         </HBox>
     </VBox>
-    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER">
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER" style="-fx-background-color: transparent">
         <GridPane.margin>
             <Insets top="40"/>
         </GridPane.margin>

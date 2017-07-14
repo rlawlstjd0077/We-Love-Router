@@ -16,7 +16,7 @@ import java.io.IOException;
 public class PacketHandler {
     private static final Logger logger = LoggerFactory.getLogger(PacketHandler.class);
 
-    public static void handle(SocketServerManager.Emulator emulator, String packetMessage){
+    public static void handle(SocketManager.Emulator emulator, String packetMessage){
         Packet packet = new Gson().fromJson(packetMessage, Packet.class);
 
         switch (Operation.fromString(packet.getBody().getOperation())){

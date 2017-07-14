@@ -4,9 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.config.Config;
 import controlsystem.data.config.LoginInform;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
@@ -27,10 +26,10 @@ public class LoginController extends BorderPane{
     private JFXButton loginBtn;
 
     private boolean loginState;
-    private SocketServerManager.Emulator emulator;
+    private SocketManager.Emulator emulator;
 
 
-    public LoginController(SocketServerManager.Emulator emulator){
+    public LoginController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {

@@ -3,11 +3,9 @@ package controlsystem.controller;
 import com.google.gson.Gson;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.controls.JFXToggleButton;
 import controlsystem.common.UiUtil;
-import controlsystem.data.config.Config;
 import controlsystem.data.config.DHCP;
-import controlsystem.manager.SocketServerManager;
+import controlsystem.manager.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -42,9 +40,9 @@ public class DHCPSettingController extends BorderPane{
     private JFXTextField endFourthField;
 
     private boolean saveState;
-    private SocketServerManager.Emulator emulator;
+    private SocketManager.Emulator emulator;
 
-    public DHCPSettingController(SocketServerManager.Emulator emulator){
+    public DHCPSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
