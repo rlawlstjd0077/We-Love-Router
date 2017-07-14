@@ -1,8 +1,8 @@
 package emulator.manger.emulator;
 
-import emulator.data.Config;
-import emulator.data.Connection;
-import emulator.data.DHCP;
+import emulator.data.config.Config;
+import emulator.data.config.Connection;
+import emulator.data.config.DHCP;
 
 /**
  * Created by dsm_025 on 2017-05-08.

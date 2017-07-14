@@ -5,19 +5,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTimePicker;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.TimeLimit;
-import controlsystem.data.TimeLimitData;
-import controlsystem.viewmodel.PortForwardTableRowViewModel;
+import controlsystem.data.config.TimeLimit;
+import controlsystem.data.config.TimeLimitData;
+import controlsystem.manager.SocketManager;
 import controlsystem.viewmodel.TimeLimitDataViewModel;
 import controlsystem.viewmodel.TimeLimitTableRowViewModel;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.json.JSONException;
@@ -29,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by dsm_025 on 2017-04-19.
  */
-public class TimeLimitSettingController extends BorderPane{
+public class TimeLimitSettingController extends BorderPane {
     @FXML
     private JFXTimePicker startTimePicker;
     @FXML
@@ -60,19 +56,19 @@ public class TimeLimitSettingController extends BorderPane{
     private JFXTextField nameField;
 
     private boolean saveState;
+    private SocketManager.Emulator emulator;
 
-
-    public TimeLimitSettingController(){
+    public TimeLimitSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        this.emulator = emulator;
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         startColumn.setCellValueFactory(cellData -> cellData.getValue().startProperty());
         endColumn.setCellValueFactory(cellData -> cellData.getValue().endProperty());
-        timeLimitTableview.setItems(TimeLimitDataViewModel.getDatas());
+        timeLimitTableview.setItems(TimeLimitDataViewModel.getDatas(emulator));
 
         addBtn.setOnMouseClicked(event -> {
             TimeLimitTableRowViewModel viewModel = new TimeLimitTableRowViewModel(new SimpleStringProperty(nameField.getText()),
@@ -106,7 +102,7 @@ public class TimeLimitSettingController extends BorderPane{
         }
 
         TimeLimit timeLimit = new TimeLimit(list);
-        Config.configFile.setTimeLimit(timeLimit);
+        emulator.getConfig().setTimeLimit(timeLimit);
         JSONObject object = new JSONObject();
         try {
             object.put("data", new Gson().toJson(timeLimit));

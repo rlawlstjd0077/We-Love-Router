@@ -1,7 +1,12 @@
 package emulator.manger;
 
 import com.google.gson.Gson;
-import emulator.data.Config;
+import emulator.data.Operation;
+import emulator.data.config.Config;
+import emulator.data.json.Body;
+import emulator.data.json.Header;
+import emulator.data.json.Packet;
+import emulator.data.json.Seq;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,5 +69,12 @@ public class JSONManager {
         jsonObject.put("type", "config");
         jsonObject.put("data", data);
         return jsonObject.toString();
+    }
+
+    public static Packet bindPacket(String src, String dest, String type, int cur, int end, Operation operation, String subValue){
+        Header header = new Header(src, dest, type);
+        Seq seq = new Seq(cur, end);
+        Body body = new Body(operation.getOperation(), subValue);
+        return new Packet(header, body, seq);
     }
 }

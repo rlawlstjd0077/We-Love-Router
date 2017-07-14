@@ -4,8 +4,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.LoginInform;
+import controlsystem.data.config.LoginInform;
+import controlsystem.manager.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.BorderPane;
@@ -26,14 +26,17 @@ public class LoginController extends BorderPane{
     private JFXButton loginBtn;
 
     private boolean loginState;
+    private SocketManager.Emulator emulator;
 
-    public LoginController(){
+
+    public LoginController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
         loginState = false;
+        this.emulator = emulator;
 
         loginBtn.setOnMouseClicked(event -> {
             if(isLoginSuccess(idField.getText(), passwordField.getText())){
@@ -55,7 +58,7 @@ public class LoginController extends BorderPane{
     }
 
     private boolean isLoginSuccess(String id, String psw){
-        LoginInform info = Config.configFile.getLogin();
+        LoginInform info = emulator.getConfig().getLogin();
         return id.equals(info.getId()) && psw.equals(info.getPassword());
     }
 }

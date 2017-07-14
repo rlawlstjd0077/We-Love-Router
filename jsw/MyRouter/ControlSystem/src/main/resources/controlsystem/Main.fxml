@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.*?>
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.control.ComboBox?>
 <GridPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@main.css"
           fx:controller="controlsystem.controller.MainController"
           prefHeight="400.0" prefWidth="800.0">
     <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_LEFT" >
         <HBox prefHeight="10" minHeight="10" >
+            <Label text="AP" prefWidth="48">
+                <HBox.margin>
+                    <Insets top="3"/>
+                </HBox.margin>
+            </Label>
             <ImageView fitWidth="22" fitHeight="22">
                 <Image url="@commons/image/powerIcon.png"/>
                 <HBox.margin>
                     <Insets right="4"/>
                 </HBox.margin>
             </ImageView>
-            <RadioButton fx:id="powerBtn" styleClass="radio-power">
+            <RadioButton fx:id="apPowerBtn" styleClass="radio-power">
 
             </RadioButton>
             <ComboBox prefWidth="240" fx:id="connectedListComboBox">
@@ -33,8 +34,25 @@
                 <Insets top="20" left="20"/>
             </VBox.margin>
         </HBox>
+        <HBox prefHeight="10" minHeight="10" >
+            <Label text="DHCP" prefWidth="36" >
+                <HBox.margin>
+                    <Insets top="3"/>
+                </HBox.margin>
+            </Label>
+            <ImageView fitWidth="22" fitHeight="22">
+                <Image url="@commons/image/powerIcon.png"/>
+                <HBox.margin>
+                    <Insets right="4"/>
+                </HBox.margin>
+            </ImageView>
+            <RadioButton fx:id="dhcpPowerBtn" styleClass="radio-power"/>
+            <VBox.margin>
+                <Insets top="20" left="20"/>
+            </VBox.margin>
+        </HBox>
     </VBox>
-    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER">
+    <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.columnSpan="2" alignment="TOP_CENTER" style="-fx-background-color: transparent">
         <GridPane.margin>
             <Insets top="40"/>
         </GridPane.margin>

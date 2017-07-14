@@ -1,7 +1,5 @@
 package emulator.manger.network;
 
-import emulator.data.Connection;
-
 import java.io.*;
 import java.net.Socket;
 

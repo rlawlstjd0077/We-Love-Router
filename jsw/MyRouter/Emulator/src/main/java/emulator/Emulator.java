@@ -1,10 +1,9 @@
 package emulator;
 
 import com.google.gson.Gson;
-import emulator.data.*;
+import emulator.data.config.*;
 import emulator.manger.JSONManager;
 import emulator.manger.listener.DHCPPowerListener;
-import emulator.manger.network.ControlSystemSocketListener;
 import emulator.manger.network.ControlSystemSocketManager;
 import emulator.manger.network.DeviceSocketManager;
 import emulator.manger.network.SocketManager;
@@ -20,21 +19,15 @@ import java.io.IOException;
  */
 public class Emulator extends Equipment {
     private static final Logger logger = LoggerFactory.getLogger(Emulator.class);
-    private Config settingData;
     private SocketManager socketManager;
 
     public void startEmulator(){
         logger.info("Router Emulator is on");
         JSONManager.readConfigFile();
-        DeviceSocketManager deviceListener = new DeviceSocketManager();
-        deviceListener.start();
 
         refresh();
         socketManager = new SocketManager();
-        try {
-            socketManager.startSocketManager();
-        } catch (IOException e) {
-        }
+        socketManager.startServer();
     }
 
     private void refresh(){

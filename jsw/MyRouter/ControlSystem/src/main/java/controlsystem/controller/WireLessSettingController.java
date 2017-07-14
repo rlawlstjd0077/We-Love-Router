@@ -1,13 +1,12 @@
 package controlsystem.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import controlsystem.common.UiUtil;
-import controlsystem.data.Config;
-import controlsystem.data.Wireless;
+import controlsystem.data.config.Wireless;
+import controlsystem.manager.SocketManager;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -30,15 +29,17 @@ public class WireLessSettingController extends BorderPane{
     private JFXPasswordField passwordField;
 
     private boolean saveState;
+    private SocketManager.Emulator emulator;
 
-    public WireLessSettingController(){
+    public WireLessSettingController(SocketManager.Emulator emulator){
         try {
             UiUtil.loadFxml(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.emulator = emulator;
         passwordField.setVisible(true);
-        Wireless wireless = Config.configFile.getWireless();
+        Wireless wireless = emulator.getConfig().getWireless();
         idField.setText(wireless.getSsid());
         passwordField.setText(wireless.getPassword());
 
@@ -57,7 +58,7 @@ public class WireLessSettingController extends BorderPane{
 
     public String toString(){
         Wireless wireless = new Wireless(idField.getText(), passwordField.getText());
-        Config.configFile.setWireless(wireless);
+        emulator.getConfig().setWireless(wireless);
 
         JSONObject object = null;
         try {
